@@ -8,9 +8,7 @@ import { localize } from 'vs/nls';
 import { ActionsOrientation, ActionBar } from 'vs/base/browser/ui/actionbar/actionbar';
 import { GLOBAL_ACTIVITY_ID, IActivity, ACCOUNTS_ACTIVITY_ID } from 'vs/workbench/common/activity';
 import { Part } from 'vs/workbench/browser/part';
-// below codes are changed by github1s
-import { GlobalActivityActionViewItem, ViewContainerActivityAction, PlaceHolderToggleCompositePinnedAction, PlaceHolderViewContainerActivityAction, AccountsActivityActionViewItem, HomeActivityActionViewItem } from 'vs/workbench/browser/parts/activitybar/activitybarActions';
-// above codes are changed by github1s
+import { ViewContainerActivityAction, PlaceHolderToggleCompositePinnedAction, PlaceHolderViewContainerActivityAction, AccountsActivityActionViewItem, HomeActivityActionViewItem } from 'vs/workbench/browser/parts/activitybar/activitybarActions';
 import { IBadge, NumberBadge } from 'vs/workbench/services/activity/common/activity';
 import { IWorkbenchLayoutService, Parts, Position } from 'vs/workbench/services/layout/browser/layoutService';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
@@ -96,11 +94,6 @@ export class ActivitybarPart extends Part implements IPaneCompositeSelectorPart 
 	//#endregion
 
 	private content: HTMLElement | undefined;
-
-	// below codes are changed by github1s
-	private homeBarContainer: HTMLElement | undefined;
-	// above codes are changed by github1s
-
 	private menuBar: CustomMenubarControl | undefined;
 	private menuBarContainer: HTMLElement | undefined;
 
@@ -445,13 +438,8 @@ export class ActivitybarPart extends Part implements IPaneCompositeSelectorPart 
 		this.menuBarContainer.classList.add('menubar');
 
 		const content = assertIsDefined(this.content);
-		// below codes are changed by github1s
-		if (this.homeBarContainer) {
-			content.insertBefore(this.menuBarContainer, this.homeBarContainer.nextSibling);
-		} else {
-			content.prepend(this.menuBarContainer);
-		}
-		// above codes are changed by github1s
+
+		content.prepend(this.menuBarContainer);
 
 		// Menubar: install a custom menu bar depending on configuration
 		this.menuBar = this._register(this.instantiationService.createInstance(CustomMenubarControl));
@@ -466,12 +454,6 @@ export class ActivitybarPart extends Part implements IPaneCompositeSelectorPart 
 		this.content = document.createElement('div');
 		this.content.classList.add('content');
 		parent.appendChild(this.content);
-
-		// below codes are changed by github1s
-		if ((window as any)?.vscodeWeb?.logo) {
-			this.createHomeBar();
-		}
-		// above codes are changed by github1s
 
 		// Install menubar if compact
 		if (getMenuBarVisibility(this.configurationService) === 'compact') {
@@ -536,47 +518,6 @@ export class ActivitybarPart extends Part implements IPaneCompositeSelectorPart 
 			}));
 		}
 	}
-
-	// below codes are changed by github1s
-	private createHomeBar(): void {
-		const logo = (window as any)?.vscodeWeb?.logo as { icon?: string; title?: string; onClick?: () => void } | undefined;
-
-		this.homeBarContainer = document.createElement('div');
-		this.homeBarContainer.setAttribute('aria-label', logo?.title || 'Home');
-		this.homeBarContainer.setAttribute('role', 'toolbar');
-		this.homeBarContainer.classList.add('home-bar');
-
-		if (logo?.onClick) {
-			this.homeBarContainer.classList.add('home-bar-clickable');
-		}
-
-		const homeBar = this._register(new ActionBar(this.homeBarContainer, {
-			actionViewItemProvider: action => this.instantiationService.createInstance(HomeActivityActionViewItem, action as ActivityAction, (theme: IColorTheme) => this.getActivitybarItemColors(theme), this.getActivityHoverOptions()),
-			orientation: ActionsOrientation.VERTICAL,
-			ariaLabel: logo?.title || 'Home',
-			animated: false,
-			preventLoopNavigation: true,
-		}));
-
-		const iconClasses = logo?.icon ? 'home-bar-custom-icon' : Codicon.home.classNames;
-
-		homeBar.push(this._register(new ActivityAction({
-			id: 'workbench.actions.home',
-			name: logo?.title || 'Home',
-			cssClass: iconClasses,
-		})));
-
-		const content = assertIsDefined(this.content);
-		content.appendChild(this.homeBarContainer);
-		// set custom logo
-		if (logo?.icon) {
-			const iconElement = this.homeBarContainer.querySelector('.home-bar-custom-icon') as HTMLElement;
-			if (iconElement?.style) {
-				iconElement.style.backgroundImage = `url(${logo.icon})`;
-			}
-		}
-	}
-	// above codes are changed by github1s
 
 	private createGlobalActivityActionBar(container: HTMLElement): void {
 		this.globalActivityActionBar = this._register(new ActionBar(container, {
@@ -1044,10 +985,10 @@ export class ActivitybarPart extends Part implements IPaneCompositeSelectorPart 
 	}
 
 	private get accountsVisibilityPreference(): boolean {
-		// below codes are changed by github1s
+		// below codes are changed by jithub
 		// hide the account button in menubar
 		return false;
-		// above codes are changed by github1s
+		// above codes are changed by jithub
 	}
 
 	private set accountsVisibilityPreference(value: boolean) {

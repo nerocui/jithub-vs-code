@@ -191,48 +191,6 @@ class MenuActivityActionViewItem extends ActivityActionViewItem {
 	}
 }
 
-// below codes are changed by github1s
-// Add a button to the top of menubar which is used to jump back to GitHub
-export class HomeActivityActionViewItem extends ActivityActionViewItem {
-
-	static readonly HOME_BAR_VISIBILITY_PREFERENCE = 'workbench.activity.showHomeIndicator';
-
-	constructor(
-		action: ActivityAction,
-		colors: (theme: IColorTheme) => ICompositeBarColors,
-		hoverOptions: IActivityHoverOptions,
-		@IThemeService themeService: IThemeService,
-		@IHoverService hoverService: IHoverService,
-		@IConfigurationService configurationService: IConfigurationService,
-		@IKeybindingService keybindingService: IKeybindingService,
-	) {
-		super(action, { draggable: false, colors, icon: true, hasPopup: true, hoverOptions }, themeService, hoverService, configurationService, keybindingService);
-	}
-
-	override render(container: HTMLElement): void {
-		super.render(container);
-
-		this._register(addDisposableListener(this.container, EventType.CLICK, (e: MouseEvent) => {
-			EventHelper.stop(e, true);
-			(window as any)?.vscodeWeb?.logo?.onClick?.();
-		}));
-
-		this._register(addDisposableListener(this.container, EventType.KEY_UP, (e: KeyboardEvent) => {
-			let event = new StandardKeyboardEvent(e);
-			if (event.equals(KeyCode.Enter) || event.equals(KeyCode.Space)) {
-				EventHelper.stop(e, true);
-				(window as any)?.vscodeWeb?.logo?.onClick?.();
-			}
-		}));
-
-		this._register(addDisposableListener(this.container, TouchEventType.Tap, (e: GestureEvent) => {
-			EventHelper.stop(e, true);
-			(window as any)?.vscodeWeb?.logo?.onClick?.();
-		}));
-	}
-}
-// above codes are changed by github1s
-
 export class AccountsActivityActionViewItem extends MenuActivityActionViewItem {
 
 	static readonly ACCOUNTS_VISIBILITY_PREFERENCE_KEY = 'workbench.activity.showAccounts';
