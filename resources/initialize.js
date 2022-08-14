@@ -17,42 +17,26 @@
 
 	// set workbench config
 	const hostname = window.location.hostname;
-	let scheme = 'github1s';
+	let scheme = 'jithub';
 	let platformName = 'GitHub';
 	let platformOrigin = 'https://github.com';
 	let logoIcon = staticAssetsPrefix + '/config/github.svg';
 	const pathParts = window.location.pathname.split('/').filter(Boolean);
-	let repository = pathParts.slice(0, 2).join('/') || 'conwnet/github1s';
-
-	if (hostname.match(/\.?gitlab1s\.com$/i)) {
-		scheme = 'gitlab1s';
-		platformName = 'GitLab';
-		platformOrigin = 'https://gitlab.com';
-		logoIcon = staticAssetsPrefix + '/config/gitlab.svg';
-		const dashIndex = pathParts.indexOf('-');
-		repository = (dashIndex < 0 ? pathParts : pathParts.slice(0, dashIndex)).join('/') || 'gitlab-org/gitlab-docs';
-	} else if (hostname.match(/\.?bitbucket1s\.org$/i)) {
-		scheme = 'bitbucket1s';
-		platformName = 'Bitbucket';
-		platformOrigin = 'https://bitbucket.org';
-		logoIcon = staticAssetsPrefix + '/config/bitbucket.svg';
-		repository = pathParts >= 2 ? pathParts.slice(0, 2).join('/') : 'atlassian/clover';
-	} else if (hostname.match(/\.?npmjs1s\.com$/i)) {
-		scheme = 'npmjs1s';
-		platformName = 'npm';
-		platformOrigin = 'https://npmjs.com';
-		logoIcon = staticAssetsPrefix + '/config/npm.svg';
-		const trimedParts = pathParts[0] === 'package' ? pathParts.slice(1) : pathParts;
-		const packageParts = trimedParts.slice(0, trimedParts[0] && trimedParts[0][0] === '@' ? 2 : 1);
-		repository = pathParts.length ? packageParts.join('/') || 'package' : 'lodash';
+	const queriesSplits = window.location.search?.split('?')[1]?.split('&');
+	const queries = {};
+	for (let i = 0; i < queriesSplits.length; i++) {
+		const query = queriesSplits[i].split('=');
+		queries[query[0]] = query[1];
 	}
+
+	let repository = !!queries ? `${queries['owner']}/${queries['repo']}` : 'nerocui/JitHubFeedback';
 
 	// set product.json
 	const productConfiguration = {
-		nameShort: platformName + '1s',
-		nameLong: platformName + '1s',
-		applicationName: platformName + '1s',
-		reportIssueUrl: 'https://github.com/conwnet/github1s/issues/new',
+		nameShort: platformName,
+		nameLong: platformName,
+		applicationName: platformName,
+		reportIssueUrl: 'https://github.com/nerocui/JitHubFeedback/issues/new',
 		extensionsGallery: {
 			serviceUrl: 'https://marketplace.visualstudio.com/_apis/public/gallery',
 			cacheUrl: 'https://vscode.blob.core.windows.net/gallery/index',
@@ -62,14 +46,11 @@
 			recommendationsUrl: 'https://az764295.vo.msecnd.net/extensions/workspaceRecommendations.json.gz',
 		},
 		linkProtectionTrustedDomains: [
+			'*.jithub.com',
 			'*.github.com',
-			'*.github1s.com',
 			'*.gitlab.com',
-			'*.gitlab1s.com',
 			'*.bitbucket.org',
-			'*.bitbucket1s.org',
 			'*.npmjs.com',
-			'*.npmjs1s.com',
 			'*.microsoft.com',
 			'*.vercel.com',
 			'*.sourcegraph.com',
@@ -222,19 +203,21 @@
 		workspaceId: scheme + ':' + repository,
 		workspaceLabel: repository,
 		hideTextFileLabelDecorations: true,
-		logo: {
-			icon: logoIcon,
-			title: 'Open on ' + platformName,
-			onClick() {
-				const pathname = window.location.pathname.length > 1 ? window.location.pathname : '/' + repository;
-				const targetPath = pathname + window.location.search + window.location.hash;
-				window.open(platformOrigin + targetPath, '_blank');
-			},
-		},
+		//no logo for JitHub Editor
+		// logo: {
+		// 	icon: logoIcon,
+		// 	title: 'Open on ' + platformName,
+		// 	onClick() {
+		// 		const pathname = window.location.pathname.length > 1 ? window.location.pathname : '/' + repository;
+		// 		const targetPath = pathname + window.location.search + window.location.hash;
+		// 		window.open(platformOrigin + targetPath, '_blank');
+		// 	},
+		// },
 		onWorkbenchReady() {
 			const loadSpinner = document.querySelector('#load-spinner');
 			loadSpinner && loadSpinner.remove();
-			renderNotification();
+			//don't render notification in JitHub
+			//renderNotification();
 		},
 	};
 })();

@@ -146,22 +146,24 @@ module.exports = {
 				...VSCODE_NODE_MODULES,
 			].filter(Boolean),
 		}),
-		new HtmlWebpackPlugin({
-			templateParameters: {
-				titleScript: fs.readFileSync('resources/titleScript.js'),
-			},
-			template: useHashHtml
-				? 'resources/index-hash.html'
-				: devVscode
-				? 'resources/index-dev-vscode.html'
-				: 'resources/index.html',
-			inject: false,
-		}),
+		// new HtmlWebpackPlugin({
+		// 	templateParameters: {
+		// 		titleScript: fs.readFileSync('resources/titleScript.js'),
+		// 	},
+		// 	template: useHashHtml
+		// 		? 'resources/index-hash.html'
+		// 		: devVscode
+		// 		? 'resources/index-dev-vscode.html'
+		// 		: 'resources/index.html',
+		// 	inject: false,
+		// }),
 		generate({
 			file: 'static/config/extensions.js',
 			content: () => {
 				const vscodeExtensions = devVscode ? scanVSCodeExtensions() : [];
-				const extensions = [...vscodeExtensions, ...scanGitHub1sExtensions()];
+				// const extensions = [...vscodeExtensions, ...scanGitHub1sExtensions()];
+				//skipping github1s extension in JitHub
+				const extensions = [...vscodeExtensions];
 				return `window.github1sExtensions = ${JSON.stringify(extensions)};`;
 			},
 		}),
