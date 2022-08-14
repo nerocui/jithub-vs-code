@@ -8,7 +8,7 @@ APP_ROOT=$(pwd)
 function main() {
 	rm -rf "${APP_ROOT}/dist"
 	cd "${APP_ROOT}"
-	# ./scripts/build/build-github1s-extensions.sh
+	./scripts/build/build-github1s-extensions.sh
 	yarn webpack
 
 	echo "all build done!"
