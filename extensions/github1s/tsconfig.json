@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "outDir": "out",
+    "lib": ["WebWorker", "es2016"],
+    "sourceMap": true,
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
