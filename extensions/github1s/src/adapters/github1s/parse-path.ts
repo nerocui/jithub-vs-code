@@ -7,6 +7,7 @@ import { parsePath } from 'history';
 import { PageType, RouterState } from '@/adapters/types';
 import { GitHub1sDataSource } from './data-source';
 import * as queryString from 'query-string';
+import { GitHubTokenManager } from './token';
 
 const parseTreeUrl = async (path: string): Promise<RouterState> => {
 	const pathParts = parsePath(path).pathname!.split('/').filter(Boolean);
@@ -117,36 +118,65 @@ const PAGE_TYPE_MAP = {
 	search: PageType.Search,
 };
 
-export const parseGitHubPath = async (path: string): Promise<RouterState> => {
-	const pathParts = parsePath(path).pathname?.split('/').filter(Boolean) || [];
-	// detect concrete PageType the *third part* in url.path
-	const pageType = pathParts[2] ? PAGE_TYPE_MAP[pathParts[2]] || PageType.Unknown : PageType.Tree;
-
-	if (pathParts.length >= 2) {
-		switch (pageType) {
-			case PageType.Tree:
-			case PageType.Unknown:
-				return parseTreeUrl(path);
-			case PageType.Blob:
-				return parseBlobUrl(path);
-			case PageType.CodeReview:
-				return parsePullUrl(path);
-			case PageType.CodeReviewList:
-				return parsePullsUrl(path);
-			case PageType.Commit:
-				return parseCommitUrl(path);
-			case PageType.CommitList:
-				return parseCommitsUrl(path);
-			case PageType.Search:
-				return parseSearchUrl(path);
+export const buildQueries = (url: string | undefined) => {
+	if (!url) {
+		return null;
+	}
+	try {
+		const queryPart = url.split('?')[1];
+		const queries = {};
+		const queriesSplits = queryPart.split('&');
+		for (let i = 0; i < queriesSplits.length; i++) {
+			const query = queriesSplits[i];
+			const querySplit = query.split('=');
+			queries[querySplit[0]] = querySplit[1];
 		}
+		console.log('parsed queries:');
+		console.log(queries);
+		return queries;
+	} catch (_e) {
+		return null;
+	}
+};
+
+export const queriesToUrlSearch = (queries: any): string => {
+	const arr: string[] = [];
+	for (const [key, value] of Object.entries(queries)) {
+		arr.push(`${key}=${value}`);
+	}
+	const search = arr.join('&');
+	return `?${search}`;
+};
+
+export const parseGitHubPath = async (path: string): Promise<RouterState> => {
+	const queries = buildQueries(parsePath(path).search);
+
+	if (!!queries && !!queries['token']) {
+		GitHubTokenManager.getInstance().setToken(queries['token']);
 	}
 
-	// fallback to default
-	return {
-		repo: 'conwnet/github1s',
-		ref: 'HEAD',
-		pageType: PageType.Tree,
-		filePath: '',
-	};
+	if (!!queries && queries['type'] === 'blob') {
+		return {
+			pageType: PageType.Blob,
+			repo:
+				!!queries['owner'] && !!queries['repo'] ? `${queries['owner']}/${queries['repo']}` : 'nerocui/JitHubFeedback',
+			ref: !!queries['ref'] ? queries['ref'] : 'HEAD',
+			filePath: !!queries['filePath'] ? queries['filePath'] : '',
+		};
+	} else if (!!queries) {
+		return {
+			pageType: PageType.Tree,
+			repo:
+				!!queries['owner'] && !!queries['repo'] ? `${queries['owner']}/${queries['repo']}` : 'nerocui/JitHubFeedback',
+			ref: !!queries['ref'] ? queries['ref'] : 'HEAD',
+			filePath: !!queries['filePath'] ? queries['filePath'] : '',
+		};
+	} else {
+		return {
+			pageType: PageType.Tree,
+			repo: 'nerocui/JitHubFeedback',
+			ref: 'HEAD',
+			filePath: '',
+		};
+	}
 };

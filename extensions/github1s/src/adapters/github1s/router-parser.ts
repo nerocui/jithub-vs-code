@@ -4,7 +4,7 @@
  */
 
 import * as adapterTypes from '../types';
-import { parseGitHubPath } from './parse-path';
+import { parseGitHubPath, queriesToUrlSearch } from './parse-path';
 
 export class GitHub1sRouterParser extends adapterTypes.RouterParser {
 	private static instance: GitHub1sRouterParser | null = null;
@@ -21,12 +21,33 @@ export class GitHub1sRouterParser extends adapterTypes.RouterParser {
 	}
 
 	buildTreePath(repo: string, ref?: string, filePath?: string): string {
-		return ref ? (filePath ? `/${repo}/tree/${ref}/${filePath}` : `/${repo}/tree/${ref}`) : `/${repo}`;
+		const queries = {};
+		const repoSplits = repo.split('/');
+		queries['owner'] = repoSplits[0];
+		queries['repo'] = repoSplits[1];
+		if (!!ref) {
+			queries['ref'] = ref;
+			queries['type'] = 'tree';
+		}
+		if (!!filePath) {
+			queries['filePath'] = filePath;
+		}
+		return queriesToUrlSearch(queries);
 	}
 
 	buildBlobPath(repo: string, ref: string, filePath: string, startLine?: number, endLine?: number): string {
-		const hash = startLine ? (endLine ? `#L${startLine}-L${endLine}` : `#L${startLine}`) : '';
-		return `/${repo}/blob/${ref}/${filePath}${hash}`;
+		const queries = {};
+		const repoSplits = repo.split('/');
+		queries['owner'] = repoSplits[0];
+		queries['repo'] = repoSplits[1];
+		queries['type'] = 'blob';
+		if (!!ref) {
+			queries['ref'] = ref;
+		}
+		if (!!filePath) {
+			queries['filePath'] = filePath;
+		}
+		return queriesToUrlSearch(queries);
 	}
 
 	buildCommitListPath(repo: string): string {
