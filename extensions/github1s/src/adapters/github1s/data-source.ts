@@ -32,7 +32,6 @@ import { matchSorter } from 'match-sorter';
 import { FILE_BLAME_QUERY } from './graphql';
 import { GitHubFetcher } from './fetcher';
 import { SourcegraphDataSource } from '../sourcegraph/data-source';
-import { GitHubTokenManager } from './token';
 
 const parseRepoFullName = (repoFullName: string) => {
 	const [owner, repo] = repoFullName.split('/');
@@ -70,9 +69,8 @@ const trySourcegraphApiFirst = (_target: any, propertyKey: string, descriptor: P
 	descriptor.value = async function <T extends (...args) => Promise<any>>(...args: Parameters<T>) {
 		const githubFetcher = GitHubFetcher.getInstance();
 		if (await githubFetcher.useSourcegraphApiFirst(args[0])) {
-			const token = GitHubTokenManager.getInstance().getToken();
 			try {
-				return await sourcegraphDataSource[propertyKey](...args, token);
+				return await sourcegraphDataSource[propertyKey](...args);
 			} catch (e) {}
 		}
 		return originalMethod.apply(this, args);
@@ -96,7 +94,6 @@ export class GitHub1sDataSource extends DataSource {
 	@trySourcegraphApiFirst
 	async provideDirectory(repoFullName: string, ref: string, path: string, recursive = false): Promise<Directory> {
 		const fetcher = GitHubFetcher.getInstance();
-		const token = GitHubTokenManager.getInstance().getToken();
 		const encodedPath = encodeFilePath(path);
 		// github api will return all files if `recursive` exists, even the value if false
 		const recursiveParams = recursive ? { recursive } : {};
@@ -105,12 +102,8 @@ export class GitHub1sDataSource extends DataSource {
 			path: encodedPath,
 			...parseRepoFullName(repoFullName),
 			...recursiveParams,
-			auth: token,
 		};
-		const { data } = await fetcher.request(
-			'GET /repos/{owner}/{repo}/git/trees/{ref}:{path}?token={auth}',
-			requestParams
-		);
+		const { data } = await fetcher.request('GET /repos/{owner}/{repo}/git/trees/{ref}:{path}', requestParams);
 		const parseTreeItem = (treeItem): DirectoryEntry => ({
 			path: treeItem.path,
 			type: FileTypeMap[treeItem.type] || FileType.File,
@@ -124,14 +117,12 @@ export class GitHub1sDataSource extends DataSource {
 		};
 	}
 
-	//can't use source graph for private repo
 	//@trySourcegraphApiFirst
 	async provideFile(repoFullName: string, ref: string, path: string): Promise<File> {
 		const fetcher = GitHubFetcher.getInstance();
-		const token = GitHubTokenManager.getInstance().getToken();
 		const { owner, repo } = parseRepoFullName(repoFullName);
-		const requestParams = { owner, repo, ref, path, auth: token };
-		const { data } = await fetcher.request('GET /repos/{owner}/{repo}/contents/{path}?token={auth}', requestParams);
+		const requestParams = { owner, repo, ref, path };
+		const { data } = await fetcher.request('GET /repos/{owner}/{repo}/contents/{path}', requestParams);
 		return { content: toUint8Array((data as any).content) };
 	}
 

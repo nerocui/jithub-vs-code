@@ -131,8 +131,6 @@ export const buildQueries = (url: string | undefined) => {
 			const querySplit = query.split('=');
 			queries[querySplit[0]] = querySplit[1];
 		}
-		console.log('parsed queries:');
-		console.log(queries);
 		return queries;
 	} catch (_e) {
 		return null;

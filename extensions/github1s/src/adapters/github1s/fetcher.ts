@@ -115,9 +115,9 @@ export class GitHubFetcher {
 			return vscode.commands.executeCommand('github1s.commands.vscode.getBrowserUrl').then(
 				(browserUrl: string) => {
 					const pathParts = vscode.Uri.parse(browserUrl).path.split('/').filter(Boolean);
-					resolve(pathParts.length >= 2 ? (pathParts.slice(0, 2) as [string, string]) : ['conwnet', 'github1s']);
+					resolve(pathParts.length >= 2 ? (pathParts.slice(0, 2) as [string, string]) : ['nerocui', 'JitHubFeedback']);
 				},
-				() => resolve(['conwnet', 'github1s'])
+				() => resolve(['nerocui', 'JitHubFeedback'])
 			);
 		}));
 	}
@@ -127,7 +127,7 @@ export class GitHubFetcher {
 			return this._repositoryPromise;
 		}
 		return (this._repositoryPromise = new Promise(async (resolve) => {
-			const [owner = 'conwnet', repo = 'github1s'] = await this.getCurrentOwnerAndRepo();
+			const [owner = 'nerocui', repo = 'JitHubFeedback'] = await this.getCurrentOwnerAndRepo();
 			const dataSource = SourcegraphDataSource.getInstance('github');
 			if (useSourcegraphApiFirst && !!(await dataSource.provideRepository(`${owner}/${repo}`))) {
 				return resolve({ private: false });

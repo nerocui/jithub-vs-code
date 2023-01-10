@@ -464,10 +464,10 @@ export class ActivitybarPart extends Part implements IPaneCompositeSelectorPart 
 		this.compositeBarContainer = this.compositeBar.create(this.content);
 
 		// Global action bar
-		this.globalActivitiesContainer = document.createElement('div');
-		this.content.appendChild(this.globalActivitiesContainer);
+		// this.globalActivitiesContainer = document.createElement('div');
+		// this.content.appendChild(this.globalActivitiesContainer);
 
-		this.createGlobalActivityActionBar(this.globalActivitiesContainer);
+		// this.createGlobalActivityActionBar(this.globalActivitiesContainer);
 
 		// Keyboard Navigation
 		this.registerKeyboardNavigationListeners();

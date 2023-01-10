@@ -109,7 +109,6 @@ export const getTextSearchResults = (
 ): Promise<TextSearchResults> => {
 	const offset = options.pageSize ? ((options.page || 1) - 1) * options.pageSize : 0;
 	const limit = options.pageSize ? options.pageSize : 100;
-
 	return sourcegraphClient
 		.query({
 			query: textSearchQuery,

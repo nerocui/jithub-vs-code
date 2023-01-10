@@ -6,12 +6,12 @@
 import router from '@/router';
 import * as vscode from 'vscode';
 import { PageType } from './adapters/types';
-import { registerCustomViews } from '@/views';
-import { decorateStatusBar } from '@/statusbar';
+// import { registerCustomViews } from '@/views';
+// import { decorateStatusBar } from '@/statusbar';
 import { registerEventListeners } from '@/listeners';
 import { registerVSCodeProviders } from '@/providers';
 import { registerGitHub1sCommands } from '@/commands';
-import { updateSourceControlChanges } from '@/changes';
+// import { updateSourceControlChanges } from '@/changes';
 import { setExtensionContext } from '@/helpers/context';
 import { adapterManager, registerAdapters } from '@/adapters';
 
@@ -38,9 +38,12 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerVSCodeProviders(),
 		registerEventListeners(),
 		registerGitHub1sCommands(),
-		registerCustomViews(),
-		updateSourceControlChanges(),
-		decorateStatusBar(),
+		//no pr or commit page in JitHub
+		// registerCustomViews(),
+		//no change view in JitHub
+		// updateSourceControlChanges(),
+		//no statuc bar extension in JitHub
+		//decorateStatusBar(),
 	]);
 
 	initialVSCodeState();

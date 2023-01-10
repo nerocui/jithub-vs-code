@@ -8,6 +8,7 @@ import { showGitpod } from './gitpod';
 import { showSponsors } from './sponsors';
 
 export const decorateStatusBar = () => {
-	showSponsors().then(() => showGitpod());
+	//don't show sponsors in JitHub
+	//showSponsors().then(() => showGitpod());
 	updateCheckoutTo();
 };

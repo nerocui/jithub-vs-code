@@ -5,9 +5,10 @@
 
 import router from '@/router';
 import { explorerRouterListener } from './explorer';
-import { sourceControlRouterListener } from './changes';
+// import { sourceControlRouterListener } from './changes';
 
 export const registerRouterEventListeners = () => {
 	router.addListener(explorerRouterListener);
-	router.addListener(sourceControlRouterListener);
+	//no need for source control in JitHub
+	// router.addListener(sourceControlRouterListener);
 };

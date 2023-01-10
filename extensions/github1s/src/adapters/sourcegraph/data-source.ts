@@ -5,6 +5,7 @@
 
 import { joinPath } from '@/helpers/util';
 import { matchSorter } from 'match-sorter';
+import { GitHubTokenManager } from '../github1s/token';
 import {
 	Branch,
 	TextSearchOptions,
@@ -109,9 +110,20 @@ export class SourcegraphDataSource extends DataSource {
 		// sourcegraph api break binary files and text coding, so we use github api first here
 		if (this.platform === 'github') {
 			try {
-				return await fetch(`https://raw.githubusercontent.com/${repo}/${ref}/${path}`)
-					.then((response) => response.arrayBuffer())
-					.then((buffer) => ({ content: new Uint8Array(buffer) }));
+				const token = GitHubTokenManager.getInstance().getToken();
+				console.log('getting file from github');
+				console.log(`token: ${token}`);
+
+				const res = await fetch(`https://raw.githubusercontent.com/${repo}/${ref}/${path}?token=${token}`);
+				console.log('res:');
+				console.log(res);
+				const buffer = await res.arrayBuffer();
+				console.log('buffer:');
+				console.log(buffer);
+				const val = { content: new Uint8Array(buffer) };
+				console.log('val:');
+				console.log(val);
+				return val;
 			} catch (e) {}
 		}
 		// TODO: support binary files for other platforms
