@@ -32,6 +32,17 @@
 	const theme = searchDict['theme'];
 	const defaultTheme = theme && theme === 'dark' ? 'Default Dark+' : 'Default Light+';
 
+	const tag = document.createElement('link');
+	tag.rel = 'stylesheet';
+	tag.type = 'text/css';
+	if (theme === 'light') {
+		tag.href = '/static/Light.css';
+	} else {
+		tag.href = '/static/Dark.css';
+	}
+
+	document.head.appendChild(tag);
+
 	// set product.json
 	const productConfiguration = {
 		nameShort: platformName,

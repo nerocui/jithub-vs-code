@@ -111,6 +111,8 @@ module.exports = {
 				{ from: 'resources/favicon*', to: '[name][ext]' },
 				{ from: 'resources/manifest.json', to: '[name][ext]' },
 				{ from: 'resources/robots.txt', to: '[name][ext]' },
+				{ from: 'resources/Light.css', to: 'static/[name][ext]' },
+				{ from: 'resources/Dark.css', to: 'static/[name][ext]' },
 				{
 					from: 'node_modules/@github1s/vscode-web/dist/extensions/**',
 					to({ context, absoluteFilename }) {
