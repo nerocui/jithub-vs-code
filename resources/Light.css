@@ -914,6 +914,23 @@ body > div > div.monaco-grid-view > div > div > div.monaco-scrollable-element > 
     color: var(--foreground) !important;
 }
 
+.composite-bar > div > ul > li > a.codicon,
+.composite-bar > div > ul > li > a.codicon:hover,
+.composite-bar > div > ul > li > a.codicon:focus {
+    color: #000000 !important;
+}
+
+.menubar.compact > div > div.codicon,
+.menubar.compact > div > div.codicon:hover,
+.menubar.compact > div > div.codicon:focus {
+    color: #333333 !important;
+}
+
+.workbench-hover-container {
+    background: #ffffff !important;
+    border-radius: var(--border-radius);
+}
+
 .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-label:not(.codicon) {
     -webkit-mask-size: 20px !important;
     background-color: var(--list-item-fg) !important;
@@ -1020,6 +1037,10 @@ body > div > div.monaco-grid-view > div > div > div.monaco-scrollable-element > 
 
 .monaco-hover {
     padding: var(--s4) !important;
+}
+
+div.content > div.grid-view-container > div > div > div > div.monaco-scrollable-element > div.split-view-container > div > div > div.editor-container > div > div > div.overflowingContentWidgets > div.monaco-hover {
+	background-color: #f3f3f3 !important
 }
 
 .editor-widget.suggest-widget {

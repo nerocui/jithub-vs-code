@@ -1042,6 +1042,15 @@ body > div > div.monaco-grid-view > div > div > div.monaco-scrollable-element > 
 	padding: var(--s4) !important;
 }
 
+div.content > div.grid-view-container > div > div > div > div.monaco-scrollable-element > div.split-view-container > div > div > div.editor-container > div > div > div.overflowingContentWidgets > div.monaco-hover {
+	background-color: #252526 !important;
+}
+
+.workbench-hover-container {
+	background: #000000 !important;
+	border-radius: var(--border-radius);
+}
+
 .editor-widget.suggest-widget {
 	backdrop-filter: none;
 	background-color: transparent !important;
