@@ -967,7 +967,7 @@ body > div > div.monaco-grid-view > div > div > div.monaco-scrollable-element > 
 /* Widget */
 .quick-input-widget,
 .editor-widget {
-	background: var(--noise-bg) repeat var(--quick-input-widget-bg) !important;
+	/* background: var(--noise-bg) repeat var(--quick-input-widget-bg) !important; */
 	background-blend-mode: exclusion;
 	border-radius: var(--border-radius);
 	box-shadow: var(--depth-16) !important;
@@ -1398,7 +1398,7 @@ div.content > div.grid-view-container > div > div > div > div.monaco-scrollable-
 }
 
 :root {
-	--flyout-bg: rgba(252, 252, 252, 0);
-	--menu-bg: rgba(252, 252, 252, 0.1);
+	--flyout-bg: rgba(252, 252, 252, 1);
+	--menu-bg: rgba(252, 252, 252, 1);
 	background: transparent !important;
 }
