@@ -14,7 +14,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-jsdoc": "^39.3.2",
+    "eslint-plugin-jsdoc": "^54.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "fs-extra": "^10.1.0",
     "generate-file-webpack-plugin": "^1.0.1",
